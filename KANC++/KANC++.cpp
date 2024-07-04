@@ -17,6 +17,7 @@
 //https://arxiv.org/abs/2305.08194
 
 //Formula4 is area of triangles as a function of vertices.
+//Formula3 is Mike's formula.
 
 #include <iostream>
 #include <thread>
@@ -108,42 +109,52 @@ void Training(KANAddend** addends, double** matrix, double* target,
 }
 
 int main() {
+
     int nRecords = 10000;
-    Formula4* f4 = new Formula4();
-    f4->GenerateData(nRecords);
+    Formula3* f3 = new Formula3();
+    f3->GenerateData(nRecords);
 
     //ShowMatrix(f4->inputs, f4->_N, f4->nInputs);
     //ShowVector(f4->target, nRecords);
 
     clock_t start_encoding = clock();
 
-    double* xmin = new double[f4->nInputs];
-    double* xmax = new double[f4->nInputs];
+    double* xmin = new double[f3->nInputs];
+    double* xmax = new double[f3->nInputs];
     double targetMin;
     double targetMax;
 
-    FindMinMax(xmin, xmax, targetMin, targetMax, f4->inputs, f4->target, f4->_N, f4->nInputs);
-
+    FindMinMax(xmin, xmax, targetMin, targetMax, f3->inputs, f3->target, f3->_N, f3->nInputs);
     //printf("Target min %4.2f, Target max %4.2f\n", targetMin, targetMax);
-    //for (int j = 0; j < f4->nInputs; ++j) {
+    //for (int j = 0; j < f3->nInputs; ++j) {
     //    printf("%4.2f %4.2f\n", xmin[j], xmax[j]);
     //}
 
     srand((unsigned int)time(NULL));
-    int nModels = 32;
+    int nModels = 11;
     double zmin = targetMin / nModels;
     double zmax = targetMax / nModels;
     KANAddend** addends = new KANAddend*[nModels];
-    for (int i = 0; i < nModels; ++i)
-    {
-        addends[i] = new KANAddend(xmin, xmax, zmin, zmax, 4, 20, 0.01, 0.01, f4->nInputs);
+    for (int i = 0; i < nModels; ++i) {
+        addends[i] = new KANAddend(xmin, xmax, zmin, zmax, 6, 12, 0.1, 0.01, f3->nInputs);
     }
 
-    std::thread th(Training, addends, f4->inputs, f4->target, nRecords, nModels, targetMin, targetMax, 46, 6, 10, 120.0);
+    std::thread th(Training, addends, f3->inputs, f3->target, nRecords, nModels, targetMin, targetMax, 36, 6, 6, 0.06);
     th.join();
-  
+
     clock_t end_encoding = clock();
     printf("Time for training %2.3f sec.\n", (double)(end_encoding - start_encoding) / CLOCKS_PER_SEC);
+
+    //Initialization for Formula4
+    //int nModels = 32;
+    //double zmin = targetMin / nModels;
+    //double zmax = targetMax / nModels;
+    //KANAddend** addends = new KANAddend*[nModels];
+    //for (int i = 0; i < nModels; ++i)
+    //{
+    //    addends[i] = new KANAddend(xmin, xmax, zmin, zmax, 4, 20, 0.01, 0.01, f4->nInputs);
+    //}
+    //std::thread th(Training, addends, f3->inputs, f3->target, nRecords, nModels, targetMin, targetMax, 46, 6, 10, 120.0);
 
     //// Object copy test //////
     KANAddend** addendsCopy = new KANAddend*[nModels];
@@ -156,9 +167,9 @@ int main() {
     int NTests = 1000;
     for (int i = 0; i < NTests; ++i)
     {
-        double* test_input = new double[f4->nInputs];
-        f4->GetInput(test_input);
-        double test_target = f4->GetTarget(test_input);
+        double* test_input = new double[f3->nInputs];
+        f3->GetInput(test_input);
+        double test_target = f3->GetTarget(test_input);
 
         double model1 = 0.0;
         for (int j = 0; j < nModels; ++j)
