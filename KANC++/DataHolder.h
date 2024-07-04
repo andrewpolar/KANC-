@@ -1,7 +1,21 @@
 #pragma once
 
-class Formula4
-{
+class Formula3 {
+public:
+	~Formula3();
+	double** inputs;
+	double* target;
+	int _N;
+	const int nInputs = 5;
+	void GetInput(double* input);
+	double GetTarget(double* input);
+	void GenerateData(int N);
+private:
+	double Function(double* input);
+};
+
+////////////////
+class Formula4 {
 public:
 	~Formula4();
 	double** inputs;
