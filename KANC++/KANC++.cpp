@@ -206,5 +206,7 @@ int main() {
 
     delete[] xmin;
     delete[] xmax;
+
+    delete f3;
 }
 
