@@ -17,16 +17,16 @@ Formula3::~Formula3() {
 
 double Formula3::Function(double* input) {
     //y = (1/pi)*(2+2*x3)*(1/3)*(atan(20*exp(x5)*(x1-0.5+x2/6))+pi/2) + (1/pi)*(2+2*x4)*(1/3)*(atan(20*exp(x5)*(x1-0.5-x2/6))+pi/2);
-    double pi = 3.14159265359;
+   double pi = 3.14159265359;
     double y = (1.0 / pi);
     y *= (2.0 + 2.0 * input[2]);
     y *= (1.0 / 3.0);
-    y *= atan(20.0 * atan(input[4]) * (input[0] - 0.5 + input[1] / 6.0)) + pi / 2.0;
+    y *= atan(20.0 * (input[0] - 0.5 + input[1] / 6.0) * exp(input[4])) + pi / 2.0;
 
     double z = (1.0 / pi);
     z *= (2.0 + 2.0 * input[3]);
     z *= (1.0 / 3.0);
-    z *= atan(20.0 * atan(input[4]) * (input[0] - 0.5 - input[1] / 6.0)) + pi / 2.0;
+    z *= atan(20.0 * (input[0] - 0.5 - input[1] / 6.0) * exp(input[4])) + pi / 2.0;
 
     return y + z;
 }
