@@ -17,7 +17,7 @@ Formula3::~Formula3() {
 
 double Formula3::Function(double* input) {
     //y = (1/pi)*(2+2*x3)*(1/3)*(atan(20*exp(x5)*(x1-0.5+x2/6))+pi/2) + (1/pi)*(2+2*x4)*(1/3)*(atan(20*exp(x5)*(x1-0.5-x2/6))+pi/2);
-   double pi = 3.14159265359;
+    double pi = 3.14159265359;
     double y = (1.0 / pi);
     y *= (2.0 + 2.0 * input[2]);
     y *= (1.0 / 3.0);
